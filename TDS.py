@@ -98,8 +98,7 @@ def main():
     
     # merge hkl and fco data (to get sintl)
     df = pd.merge(df, df_hkl, on=['h','k','l'])
-    
-    # apply types
+    # set types
     df[['h','k','l','bn']] = df[['h','k','l','bn']].astype(np.int8)
     
     # bin it
@@ -173,10 +172,8 @@ def main():
         sfacs = sfacs**2
         # for some reason this scales it -> future problem!
         sfacs /= sfacs.max()
-        
         # fit it
         popt, pcov = curve_fit(func, bins, sfacs, p0=(0.0,0.0))
-        
         # update overall correction factor
         corr_fact += popt
         
@@ -196,10 +193,8 @@ def main():
         
         # merge hkl and fco data (to get sintl)
         df = pd.merge(df, df_hkl, on=['h','k','l'])
-        
-        # apply types
+        # set types
         df[['h','k','l','bn']] = df[['h','k','l','bn']].astype(np.int8)
-        
         # apply correction
         df['hkl_F2o'] = df['hkl_F2o'] / df['stl'].apply(func, args=(*popt,))
         
@@ -247,10 +242,8 @@ def main():
     
     # merge hkl and fco data (to get sintl)
     df = pd.merge(df, df_hkl, on=['h','k','l'])
-    
-    # apply types
+    # set types
     df[['h','k','l','bn']] = df[['h','k','l','bn']].astype(np.int8)
-    
     # apply overall correction
     df['hkl_F2o'] = df['hkl_F2o'] / df['stl'].apply(func, args=(*corr_fact,))
     
