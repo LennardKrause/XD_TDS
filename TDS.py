@@ -52,7 +52,7 @@ xd.* - final corrected 1-scale .hkl, .mas and .inp files.
 '''
 
 path_xdlsm = r'c:\xd2016\bin\xdlsm.exe'
-scalefac_num = 12
+sf_num = 12
 max_cycles = 2
 ext_to_save = ['hkl','fco','res','inp','fou','mas']
 
@@ -82,8 +82,10 @@ def main():
     save_copies(ext_to_save, num)
     
     # read fco data
-    df = pd.DataFrame(np.loadtxt(f"xd.fco", skiprows=26, usecols=(0,1,2,3,4,6,7)),
-                      columns=['h','k','l','F2c','F2o','stl','xdr'], dtype=np.float)
+    df = pd.DataFrame(np.loadtxt(f"xd.fco", skiprows=26,
+                                 usecols=(0,1,2,3,4,6,7)),
+                      columns=['h','k','l','F2c','F2o','stl','xdr'],
+                      dtype=np.float)
     
     # reject unused
     df.query("xdr == 0", inplace=True)
@@ -92,8 +94,10 @@ def main():
     # read hkl header and data
     with open(f"xd.hkl") as of:
         header = of.readline()
-        df_hkl = pd.DataFrame(np.loadtxt(of, usecols=(0,1,2,3,4,5), comments='!'),
-                              columns=['h','k','l','bn','hkl_F2o','hkl_F2s'],
+        df_hkl = pd.DataFrame(np.loadtxt(of, usecols=(0,1,2,3,4,5),
+                                         comments='!'),
+                              columns=['h','k','l','bn','hkl_F2o',
+                                       'hkl_F2s'],
                               dtype=np.float)
     
     # merge hkl and fco data (to get sintl)
@@ -102,7 +106,7 @@ def main():
     df[['h','k','l','bn']] = df[['h','k','l','bn']].astype(np.int8)
     
     # bin it
-    binned, bins = pd.cut(df['stl'], scalefac_num, retbins=True)
+    binned, bins = pd.cut(df['stl'], sf_num, retbins=True)
     # calculate the centers of the bins
     bins = (bins[1:]+bins[:-1])/2
     # batch number = bin number
@@ -123,10 +127,10 @@ def main():
         rf = of.read()
     # update the USAGE line
     rf = re.sub('(USAGE(?:\s+\d+){5})\s+(?:\d+)((?:\s+\d+){8})',
-                f"\g<1>{scalefac_num:4}\g<2>", rf)
+                f"\g<1>{sf_num:4}\g<2>", rf)
     # add the scalefactor starting values
     rf = re.sub('^(\s+\d+\.\d+E(?:\-|\+)\d[1-9])$',
-                ('\g<1>'*6+'\n')*(scalefac_num//6)+'\g<1>'*(scalefac_num%6),
+                ('\g<1>'*6+'\n')*(sf_num//6)+'\g<1>'*(sf_num%6),
                 rf, flags=re.MULTILINE)
     # write new .inp
     with open(f"xd.inp", 'w') as wf:
@@ -136,14 +140,14 @@ def main():
     with open(f"xd.mas") as of:
         rf = of.read()
     # add the scalefactors to be refined
-    rf = re.sub('(SCALE\s+)(\d)+', '\g<1>'+'1'*scalefac_num, rf)
+    rf = re.sub('(SCALE\s+)(\d)+', '\g<1>'+'1'*sf_num, rf)
     # write new .mas
     with open(f"xd.mas", 'w') as wf:
         wf.write(rf)
     
     # print an info header
     print(f"\n {'>':>^66}")
-    print(f" >>> {f'Initital {scalefac_num:>2} Scalefactors Refinement':^58} >>>")
+    print(f" >>> {f'{sf_num:>2} Scalefactor Refinement':^58} >>>")
     # run xdlsm
     p = Popen(path_xdlsm)
     p.wait()
@@ -165,8 +169,8 @@ def main():
             rf = of.read()
         # parse new scalefactors from .res
         sfacs = np.array(re.findall('(\d+\.\d+E(?:\-|\+)\d\d)', rf,
-                         flags=re.MULTILINE)[-scalefac_num:]).astype(np.float)
-        assert len(sfacs) == scalefac_num
+                         flags=re.MULTILINE)[-sf_num:]).astype(np.float)
+        assert len(sfacs) == sf_num
         # we need to square the scalefactors (K)
         # Fo**2 = Fc**2 * K**2
         sfacs = sfacs**2
@@ -178,8 +182,10 @@ def main():
         corr_fact += popt
         
         # read fco data
-        df = pd.DataFrame(np.loadtxt(f"xd.fco", skiprows=26, usecols=(0,1,2,3,4,6,7)),
-                          columns=['h','k','l','F2c','F2o','stl','xdr'], dtype=np.float)
+        df = pd.DataFrame(np.loadtxt(f"xd.fco", skiprows=26,
+                                     usecols=(0,1,2,3,4,6,7)),
+                          columns=['h','k','l','F2c','F2o','stl','xdr'],
+                          dtype=np.float)
         # reject unused
         df.query("xdr == 0", inplace=True)
         df.drop(['xdr'], axis=1, inplace=True)
@@ -187,21 +193,24 @@ def main():
         # read hkl header and data
         with open(f"xd.hkl") as of:
             header = of.readline()
-            df_hkl = pd.DataFrame(np.loadtxt(of, usecols=(0,1,2,3,4,5), comments='!'),
-                                  columns=['h','k','l','bn','hkl_F2o','hkl_F2s'],
-                                  dtype=np.float)
+            df_hkl = pd.DataFrame(np.loadtxt(of, usecols=(0,1,2,3,4,5),
+                                             comments='!'),
+                                  columns=['h','k','l','bn','hkl_F2o',
+                                  'hkl_F2s'], dtype=np.float)
         
         # merge hkl and fco data (to get sintl)
         df = pd.merge(df, df_hkl, on=['h','k','l'])
         # set types
         df[['h','k','l','bn']] = df[['h','k','l','bn']].astype(np.int8)
         # apply correction
-        df['hkl_F2o'] = df['hkl_F2o'] / df['stl'].apply(func, args=(*popt,))
+        df['hkl_F2o'] = df['hkl_F2o'] / df['stl'].apply(func, 
+                                                        args=(*popt,))
         
         # write new hkl
         with open(f"xd.hkl", 'w') as wf:
             wf.write(header)
-            wf.write(f'!TDS CORRECTION FACTOR: a={popt[0]:.3f}, b={popt[1]:.3f}\n')
+            wf.write(f'!TDS CORRECTION FACTOR: a={popt[0]:.3f}, '
+                     f'b={popt[1]:.3f}\n')
             df.drop(['F2c','F2o','stl'], axis=1, inplace=True)
             df.to_string(wf, index=False, header=False,
                          columns=['h','k','l','bn','hkl_F2o','hkl_F2s'],
@@ -227,8 +236,10 @@ def main():
     ##      correction factor      ##
     #################################
     # read fco data
-    df = pd.DataFrame(np.loadtxt(f"xd00.fco", skiprows=26, usecols=(0,1,2,3,4,6,7)),
-                      columns=['h','k','l','F2c','F2o','stl','xdr'], dtype=np.float)
+    df = pd.DataFrame(np.loadtxt(f"xd00.fco", skiprows=26,
+                                 usecols=(0,1,2,3,4,6,7)),
+                      columns=['h','k','l','F2c','F2o','stl','xdr'],
+                      dtype=np.float)
     # reject unused
     df.query("xdr == 0", inplace=True)
     df.drop(['xdr'], axis=1, inplace=True)
@@ -236,21 +247,24 @@ def main():
     # read hkl header and data
     with open(f"xd00.hkl") as of:
         header = of.readline()
-        df_hkl = pd.DataFrame(np.loadtxt(of, usecols=(0,1,2,3,4,5), comments='!'),
-                              columns=['h','k','l','bn','hkl_F2o','hkl_F2s'],
-                              dtype=np.float)
+        df_hkl = pd.DataFrame(np.loadtxt(of, usecols=(0,1,2,3,4,5),
+                                         comments='!'),
+                              columns=['h','k','l','bn','hkl_F2o',
+                              'hkl_F2s'], dtype=np.float)
     
     # merge hkl and fco data (to get sintl)
     df = pd.merge(df, df_hkl, on=['h','k','l'])
     # set types
     df[['h','k','l','bn']] = df[['h','k','l','bn']].astype(np.int8)
     # apply overall correction
-    df['hkl_F2o'] = df['hkl_F2o'] / df['stl'].apply(func, args=(*corr_fact,))
+    df['hkl_F2o'] = df['hkl_F2o'] / df['stl'].apply(func, 
+                                                    args=(*corr_fact,))
     
     # write new hkl
     with open(f"xd.hkl", 'w') as wf:
         wf.write(header)
-        wf.write(f'!TDS CORRECTION FACTOR: a={corr_fact[0]:.3f}, b={corr_fact[1]:.3f}\n')
+        wf.write(f'!TDS CORRECTION FACTOR: a={corr_fact[0]:.3f}, '
+                 f'b={corr_fact[1]:.3f}\n')
         df.drop(['F2c','F2o','stl'], axis=1, inplace=True)
         df.to_string(wf, index=False, header=False,
                     columns=['h','k','l','bn','hkl_F2o','hkl_F2s'],
