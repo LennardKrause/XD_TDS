@@ -23,7 +23,7 @@ The program needs the initial *.hkl* file to have 6 columns, that should be defa
  
 *xd0X.\** - some more X-scale cycles.
  
-*xd.\** - final corrected *.hkl* and 1-scale *.mas* and *.inp* files.
+*xd.\** - final corrected 1-scale *.hkl*, *.mas* and *.inp* files.
 
 ## Requirements
 
