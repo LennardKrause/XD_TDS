@@ -170,7 +170,7 @@ def main():
         # parse new scalefactors from .res
         sfacs = np.array(re.findall('(\d+\.\d+E(?:\-|\+)\d\d)', rf,
                          flags=re.MULTILINE)[-sf_num:]).astype(np.float)
-        assert len(sfacs) == sf_num
+        assert len(sfacs) == sf_num, 'Failed to parse Scalefactors!'
         # we need to square the scalefactors (K)
         # Fo**2 = Fc**2 * K**2
         sfacs = sfacs**2
