@@ -23,3 +23,12 @@ The program needs the initial *.hkl* file to have 6 columns, that should be defa
 *xd0X.\** - some more X-scale cycles.
  
 *xd.\** - final corrected *.hkl* and 1-scale *.mas* and *.inp* files.
+
+## Requirements
+
+#### [Python](https://www.python.org/) 3.6 or later (f-strings!)
+
+#### Libraries:
+  - [numpy](https://www.numpy.org/)
+  - [pandas](https://pandas.pydata.org/)
+  - [scipy](https://www.scipy.org/)
