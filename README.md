@@ -6,7 +6,7 @@
 ### How to
  All that is needed is to put the latest *.inp*, *.hkl* and *.mas* files into a folder and run it.
  The Masterfile should be set-up to at least refine the non-Hydrogen *Uij* and *monopoles* of **all** atoms, *multipoles* and *Kappa* would help in determining better parameters but take a lot more time to refine, please perform different TDS refinements and check for consistency! 
- The parameters *a* and *b* used to correct an hkl file are written to the *.hkl* and the line: **!TDS CORRECTION FACTOR: a=x.xxx, b=x.xxx**
+ The parameters *a* and *b* used to correct an hkl file are written to the *.hkl* and the line: _!TDS CORRECTION FACTOR: a=x.xxx, b=x.xxx_
 is added and should remain there for later reference! XD will correctly ignore the line.
 
 ### The small note
