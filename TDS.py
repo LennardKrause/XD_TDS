@@ -7,6 +7,7 @@ from subprocess import Popen
 '''
 In the paper Empirical correction for resolution- and temperature-
 dependent errors caused by factors such as thermal diffuse scattering
+(https://scripts.iucr.org/cgi-bin/paper?ks5474)
 the Authors suggest to use a polynomial expression to counter the
 effect of TDS of the form alpha = a*x² + b*x³ as a function of
 sin(θ)/λ. The program will set-up a 12 scale-factor refinement for a
