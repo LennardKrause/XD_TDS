@@ -163,10 +163,10 @@ def main():
         # read xd result
         with open(f"xd.res") as of:
             rf = of.read()
-        
         # parse new scalefactors from .res
-        sfacs = np.array(re.findall('(\d+\.\d+E(?:\-|\+)\d[1-9])', rf,
+        sfacs = np.array(re.findall('(\d+\.\d+E(?:\-|\+)\d\d)', rf,
                          flags=re.MULTILINE)[-scalefac_num:]).astype(np.float)
+        assert len(sfacs) == scalefac_num
         # we need to square the scalefactors (K)
         # Fo**2 = Fc**2 * K**2
         sfacs = sfacs**2
