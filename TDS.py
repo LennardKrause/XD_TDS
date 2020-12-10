@@ -93,7 +93,7 @@ def main():
                               columns=['h','k','l','bn','hkl_F2o','hkl_F2s'],
                               dtype=np.float)
     
-    # merge hkl and fco data (get sintl)
+    # merge hkl and fco data (to get sintl)
     df = pd.merge(df, df_hkl, on=['h','k','l'])
     
     # apply types
@@ -122,7 +122,7 @@ def main():
     # update the USAGE line
     rf = re.sub('(USAGE(?:\s+\d+){5})\s+(?:\d+)((?:\s+\d+){8})',
                 f"\g<1>{scalefac_num:4}\g<2>", rf)
-    # add the new scalefactor statring values
+    # add the scalefactor starting values
     rf = re.sub('^(\s+\d+\.\d+E(?:\-|\+)\d[1-9])$',
                 ('\g<1>'*6+'\n')*(scalefac_num//6)+'\g<1>'*(scalefac_num%6),
                 rf, flags=re.MULTILINE)
@@ -133,7 +133,7 @@ def main():
     # edit xd master
     with open(f"xd.mas") as of:
         rf = of.read()
-    # add the new number of scalefactors
+    # add the scalefactors to be refined
     rf = re.sub('(SCALE\s+)(\d)+', '\g<1>'+'1'*scalefac_num, rf)
     # write new .mas
     with open(f"xd.mas", 'w') as wf:
@@ -155,6 +155,7 @@ def main():
     #############################
     ## iterate it (if needed!) ##
     #############################
+    # overall correction factor
     corr_fact = np.array([0.0,0.0])
     for _ in range(max_cycles):
         
@@ -168,7 +169,7 @@ def main():
         # we need to square the scalefactors (K)
         # Fo**2 = Fc**2 * K**2
         sfacs = sfacs**2
-        # for some reason this scales it future problem!
+        # for some reason this scales it -> future problem!
         sfacs /= sfacs.max()
         
         # fit it
