@@ -42,13 +42,9 @@ be default anyways.
 
 Output (after the program completed!)
 xd00.* - Initial 1-scale refinement.
-
 xd01.* - Initial 12-scale refinement.
-
 xd02.* - 12-scale cycles.
-
 xd0X.* - some more 12-scale cycles.
-
 xd.* - final corrected .hkl and 1-scale .mas and .inp files.
 '''
 
