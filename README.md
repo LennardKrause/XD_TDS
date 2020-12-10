@@ -16,8 +16,12 @@ is added and should remain there for later reference! XD will correctly ignore t
  The program needs the initial .hkl file to have 6 columns, that should be default anyways.
 
 ### Output (after the program completed!)
- xd00.* -> Initial 1-scale refinement.
- xd01.* -> Initial 12-scale refinement.
- xd02.* -> 12-scale cycles.
- xd0X.* -> more 12-scale cycles.
- xd.* -> final corrected .hkl and 1-scale .mas and .inp files.
+ xd00.* - Initial 1-scale refinement.
+ 
+ xd01.* - Initial 12-scale refinement.
+ 
+ xd02.* - 12-scale cycles.
+ 
+ xd0X.* - more 12-scale cycles.
+ 
+ xd.* - final corrected .hkl and 1-scale .mas and .inp files.
