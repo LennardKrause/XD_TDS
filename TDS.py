@@ -148,7 +148,6 @@ def main():
     
     # get the next available number
     num = f"{len(glob.glob('xd??.hkl')):>02}"
-    
     # save copies
     save_copies(ext_to_save, num)
     
@@ -192,7 +191,7 @@ def main():
                                   columns=['h','k','l','bn','hkl_F2o','hkl_F2s'],
                                   dtype=np.float)
         
-        # merge hkl and fco data (get sin(t)/l)
+        # merge hkl and fco data (to get sintl)
         df = pd.merge(df, df_hkl, on=['h','k','l'])
         
         # apply types
@@ -215,14 +214,12 @@ def main():
         # print an info header
         print(f"\n {'>':>^66}")
         print(f" >>> {f'Cycle {num} {popt}':^58} >>>")
-        
         # run xdlsm
         p = Popen(path_xdlsm)
         p.wait()
 
         # get the next available number
         num = f"{len(glob.glob('xd??.hkl')):>02}"
-        
         # save copies
         save_copies(ext_to_save, num)
     
@@ -245,7 +242,7 @@ def main():
                               columns=['h','k','l','bn','hkl_F2o','hkl_F2s'],
                               dtype=np.float)
     
-    # merge hkl and fco data (get sin(t)/l)
+    # merge hkl and fco data (to get sintl)
     df = pd.merge(df, df_hkl, on=['h','k','l'])
     
     # apply types
@@ -265,6 +262,7 @@ def main():
                                 '{:3.0f}'.format,'{:1.0f}'.format,
                                 '{:12f}'.format,'{:12f}'.format])
     
+    # retrieve original 1 scale refinement
     shutil.copy(f"xd00.mas", f"xd.mas")
     shutil.copy(f"xd00.inp", f"xd.inp")
     
@@ -272,7 +270,6 @@ def main():
     print(f"\n {'>':>^66}")
     print(f" >>> {f'Final 1 Scalefactor Refinement':^58} >>>")
     print(f" >>> {f'{corr_fact}':^58} >>>")
-    
     # run xdlsm
     p = Popen(path_xdlsm)
     p.wait()
