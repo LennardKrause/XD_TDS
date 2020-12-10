@@ -29,5 +29,4 @@ The program needs the initial *.hkl* file to have 6 columns, that should be defa
 
 #### [Python](https://www.python.org/) 3.6 or later (f-strings!)
 
-#### Libraries:
-  - [numpy](https://www.numpy.org/), [pandas](https://pandas.pydata.org/), [scipy](https://www.scipy.org/)
+#### Libraries: [numpy](https://www.numpy.org/), [pandas](https://pandas.pydata.org/), [scipy](https://www.scipy.org/)
