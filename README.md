@@ -21,4 +21,4 @@ is added and should remain there for later reference! XD will correctly ignore t
  
  *xd0X.\** - some more X-scale cycles.
  
- *xd.\** - final corrected .hkl and 1-scale .mas and .inp files.
+ *xd.\** - final corrected *.hkl* and 1-scale *.mas* and *.inp* files.
