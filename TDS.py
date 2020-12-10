@@ -9,7 +9,7 @@ In the paper Empirical correction for resolution- and temperature-
 dependent errors caused by factors such as thermal diffuse scattering
 (https://scripts.iucr.org/cgi-bin/paper?ks5474) the Authors suggest to
 use a polynomial expression to counter the effect of TDS of the form
-alpha = a*x² + b*x³ as a function of sin(θ)/λ. The program runs XD2016
+alpha = a*x² + b*x³ as a function of sin(θ)/λ. This program runs XD2016
 and will perform all necessary steps to find best estimates for a and
 b. It will set-up a X [12] resolution-dependent scale-factor refinement
 for a given set of .mas, .inp and .hkl files and refine X [2] cycles.
@@ -43,7 +43,7 @@ The small note
 The program needs the initial .hkl file to have 6 columns, that should
 be default anyways.
 
-Output (after the program completed!)
+Output
 xd00.* - Initial 1-scale refinement.
 xd01.* - Initial X-scale refinement.
 xd02.* - X-scale cycles.
