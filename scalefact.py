@@ -2,6 +2,16 @@ import os
 import re
 import numpy as np
 import pandas as pd
+"""
+scalefact.py
+
+Description:
+This script divides a given XD2006 hkl file into 
+10 resolution dependent batches (scale factors) 
+and writes a new hkl file.
+"""
+# Define the number of scale factors
+SF_NUM = 10
 
 def get_cell_and_wave(fpath):
     """
@@ -156,12 +166,12 @@ def write_hkl(head, data, ndat, fpath):
     print(f'Data written to {fpath}')
 
 def main():
-    # Check if the current working directory contains 'xd.mas'
     homedir = os.path.dirname(__file__)
-    if os.path.exists(os.path.join(homedir, 'xd.mas')): pass
-    else: raise SystemExit(f'xd.mas not found in {homedir}')
-    # Define the number of scale factors
-    sf_num = 10
+    # Check if the current working directory contains 'xd.mas'
+    if os.path.exists(os.path.join(homedir, 'xd.mas')):
+        pass
+    else:
+        raise SystemExit(f'xd.mas not found in {homedir}')
     # Get the cell parameters and wavelength from the XD file
     cell, wave = get_cell_and_wave(os.path.join(homedir, 'xd.mas'))
     # Get the header and data from the HKL file
@@ -177,7 +187,7 @@ def main():
     # The resolution is calculated as the norm of the scattering vector.
     stl = np.linalg.norm(scatvec, axis=1) / 2
     # Create 'scalefactor' number of resolution bins
-    sf_range = np.linspace(0, stl.max(), sf_num + 1)
+    sf_range = np.linspace(0, stl.max(), SF_NUM + 1)
     # Check if the xd.fco file exists and if its stl values 
     # are consistent with the calculated stl values
     if os.path.exists(os.path.join(homedir, 'xd.fco')):
@@ -186,7 +196,7 @@ def main():
     else:
         print('xd.fco not found, skipping consistency check!')
     # Assign scale factors based on the resolution bins
-    data['s'] = pd.cut(stl, bins=sf_range, labels=np.arange(1, sf_num+1), include_lowest=True)
+    data['s'] = pd.cut(stl, bins=sf_range, labels=np.arange(1, SF_NUM+1), include_lowest=True)
     # Write the scaled data to a new HKL file
     write_hkl(head, data, ndat, os.path.join(homedir, 'xd_scaled.hkl'))
 
